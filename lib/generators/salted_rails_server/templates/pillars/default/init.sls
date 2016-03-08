@@ -1,4 +1,5 @@
 default:
+  rails_env: development
   user:
     username: deploy
     shell: /bin/bash
