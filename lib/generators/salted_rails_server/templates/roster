@@ -1,0 +1,5 @@
+managed:
+  host: IP or DNS Name or remote host
+  user: username on remote host
+  sudo: true
+  priv: /path/to/remote/user/.ssh/id_rsa
