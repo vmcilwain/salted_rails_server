@@ -6,10 +6,10 @@ default:
   ssh:
     key: ssh-rsa ......
   ruby:
-    version: 2.2.3
+    version: 2.2.4
   mysql:
     root_password: somepassword
     rails_user: rails_user
     rails_user_password: somepassword
   elasticsearch:
-    version: elasticsearch-1.7.2.deb
+    version: 2.3.4
