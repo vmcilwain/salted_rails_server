@@ -2,14 +2,14 @@ bundler:
   gem.installed:
     - name: bundler
     - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
-    - ruby: {{ salt['pillar.get']('default:ruby:version', '2.2.3') }}
+    - ruby: {{ salt['pillar.get']('default:ruby:version', '2.2.4') }}
 rails:
   gem.installed:
     - name: rails
     - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
     - rdoc: False
     - ri: False
-    - ruby: {{ salt['pillar.get']('default:ruby:version', '2.2.3') }}
+    - ruby: {{ salt['pillar.get']('default:ruby:version', '2.2.4') }}
     - require:
       - gem: bundler
 
@@ -17,7 +17,7 @@ unicorn:
   gem.installed:
     - name: unicorn
     - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
-    - ruby: {{ salt['pillar.get']('default:ruby:version', '2.2.3') }}
+    - ruby: {{ salt['pillar.get']('default:ruby:version', '2.2.4') }}
 
 rails_env:
   cmd.run:
@@ -33,3 +33,4 @@ chown /var/www:
     - name: chown {{ salt['pillar.get']('default:user:username', 'deploy') }}:{{ salt['pillar.get']('default:user:username', 'deploy') }} /var/www
     - require:
       - cmd: mkdir /var/www
+
