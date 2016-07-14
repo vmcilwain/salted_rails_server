@@ -59,6 +59,18 @@ Add your custom options to the following files:
 * pillars/default/init.sls - usernames, password, versions of items to be installed
 
 
+## Testing salt-ssh connection
+
+```
+sudo salt-ssh -i '*' test.ping
+```
+
+The following should be returned:
+```
+managed:
+    True
+```
+
 ## Running the code
 
 Installing all states:
