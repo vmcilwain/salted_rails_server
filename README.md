@@ -73,19 +73,22 @@ managed:
 
 ## Running the code
 
-Installing all states:
+### Installing all states:
 
 ```
 sudo salt-ssh -i '*' state.apply setup
 ```
 
-Installing an individual state:
+This takes a while and there aren't any status updates as things
+progress. Be patient!
+
+### Installing an individual state:
 
 ```
 sudo salt-ssh -i '*' state.apply state_file
 ```
 
-### States to chose from
+#### States to chose from
 
 * elasticsearch
 * mysql
@@ -95,15 +98,15 @@ sudo salt-ssh -i '*' state.apply state_file
 * rvm
 * user
 
-## Details on what the code does
+## Code Details
 
 ### User state
 
-Creates a user that is defined in pillars/default/init.sls. If a user is not found it will default to user called deploy. This sate also addes the user to /etc/sudoers for executing code without the need for a password.
+Creates a user that is defined in pillars/default/init.sls. If a user is not found it will default to user named deploy. This state also addes the user to /etc/sudoers for executing code without the need for a password.
 
-### RSA state
+#### RSA key
 
-Update pillars/default/init.sls to add your ssh key to log in as the user created in the user state
+Update pillars/default/init.sls to add your ssh key to log in as the user created in the user state. This is required since the user created does not have a default password assigned. This is done for strong security!
 
 ### RVM state
 
