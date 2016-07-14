@@ -12,9 +12,10 @@ A ruby on rails generator used to provision a new server (using salt-ssh) with t
 * MySQL - latest OS repo version
 
 ## Tested on
-
-* Ubuntu 14.04
-* Ubuntu 15.10
+* saltstack 2016.3.1
+* Ubuntu 14.04 (trusty)
+* Ubuntu 15.10 (wily)--
+* ubuntu 16.04 (xenial)
 
 No reason this should not work on any other saltstack supported OS. If you have tried this on any other OS and it did not work, let me know.
 
@@ -48,7 +49,7 @@ The following files will be generated:
 * master
 * roster
 * Saltfile
-* salted_rails_server/pillars*
+* salted_rails_server/pillars/*
 * salted_rails_server/states/*
 
 ## Configuration
