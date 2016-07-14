@@ -4,13 +4,13 @@ openjdk_7_jre:
 
 es_download:
   cmd.run:
-    - name: wget -P /tmp/ https://download.elastic.co/elasticsearch/elasticsearch/{{ salt['pillar.get']('default:elasticsearch:version', 'elasticsearch-1.7.2.deb') }}
+    - name: wget -P /tmp/ https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/{{ salt['pillar.get']('default:elasticsearch:version', '2.3.4') }}/elasticsearch-{{ salt['pillar.get']('default:elasticsearch:version', '2.3.4') }}.deb
     - require:
       - pkg: openjdk_7_jre
 
 es_install:
   cmd.run:
-    - name: dpkg -i /tmp/{{ salt['pillar.get']('default:elasticsearch:version', 'elasticsearch-1.7.2.deb') }}
+    - name: dpkg -i /tmp/elasticsearch-{{ salt['pillar.get']('default:elasticsearch:version', '2.3.4') }}.deb
     - require:
       - cmd: es_download
 
@@ -25,3 +25,4 @@ start_elasticsearch:
     - name: service elasticsearch start
     - require:
       - cmd: es_auto_start
+
