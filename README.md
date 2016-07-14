@@ -1,14 +1,15 @@
 # salted_rails_server
 
-A ruby on rails generator used to provision a new server with the following:
+A ruby on rails generator used to provision a new server (using salt-ssh) with the following:
 
-* User for running rails
-* RVM
-* NGINX
-* Rails
-* Elasticsearch
-* NodeJS
-* MySQL
+* RAILS_ENV set to development
+* User for running rails - default: deploy
+* RVM - latest stable version
+* NGINX - latest OS repo version
+* Rails - latest stable version
+* Elasticsearch - default: 2.3.4
+* NodeJS - latest OS repo version
+* MySQL - latest OS repo version
 
 ## Tested on
 
@@ -20,7 +21,6 @@ No reason this should not work on any other saltstack supported OS. If you have 
 ## salt-ssh installation
 
 This code requires that you have Saltstack's salt-ssh already installed the system you are deploying from and a compatible version of python on the system you are deploying to.
-
 
 Consult the following documentation for your OS:
 https://docs.saltstack.com/en/latest/topics/installation/index.html
@@ -56,7 +56,7 @@ The following files will be generated:
 Add your custom options to the following files:
 
 * roster - remote host(s) information
-* pillars/default/init.sls - usernames, password, versions of items to be installed
+* pillars/default/init.sls - rails environment, username, ssh-key, mysql root and rails_user password and version of ruby and elasticsearch to be installed.
 
 
 ## Testing salt-ssh connection
@@ -102,6 +102,7 @@ sudo salt-ssh -i '*' state.apply state_file
 Creates a user that is defined in pillars/default/init.sls. If a user is not found it will default to user called deploy. This sate also addes the user to /etc/sudoers for executing code without the need for a password.
 
 ### RSA state
+
 Update pillars/default/init.sls to add your ssh key to log in as the user created in the user state
 
 ### RVM state
@@ -111,7 +112,7 @@ Sets the default to the specified version in pillars/default/init.sls
 
 ### Rails state
 
-Installs the following gems in RVM
+Installs the following gems under RVM
 
 * Bundler
 * Rails
