@@ -9,7 +9,7 @@ gpg-import-D39DC0E3:
     cmd.run:
       - require:
           - pkg: gpg-deps
-      - name: 'gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys D39DC0E3'
+      - name: 'gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3'
       - unless: "gpg --fingerprint |fgrep 'Key fingerprint = 409B 6B17 96C2 7546 2A17  0311 3804 BB82 D39D C0E3'"
 
 rvm-deps:
@@ -69,16 +69,17 @@ rvm_reload:
     - require:
       - cmd: rvm_install
 
-ruby-{{ salt['pillar.get']('default:ruby:version', '2.2.3') }}:
+ruby-{{ salt['pillar.get']('default:ruby:version', '2.2.4') }}:
     cmd.run:
-      - name: rvm install {{ salt['pillar.get']('default:ruby:version', '2.2.3') }}
+      - name: rvm install {{ salt['pillar.get']('default:ruby:version', '2.2.4') }}
       - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
       - require:
         - cmd: rvm_reload
 
 rvm_default:
   cmd.run:
-    - name: /bin/bash --login -c 'rvm use {{ salt['pillar.get']('default:ruby:version', '2.2.3') }} --default'
+    - name: /bin/bash --login -c 'rvm use {{ salt['pillar.get']('default:ruby:version', '2.2.4') }} --default'
     - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
     - require:
-      - cmd: ruby-{{ salt['pillar.get']('default:ruby:version', '2.2.3') }}
+      - cmd: ruby-{{ salt['pillar.get']('default:ruby:version', '2.2.4') }}
+
