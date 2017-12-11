@@ -6,8 +6,9 @@ npm:
     - require:
       - pkg: nodejs
 
+{% if not salt['file.file_exists' ]('/usr/bin/node') %}
 symlink:
-  cmd.run:
-    - name: ln -s /usr/bin/nodejs /usr/bin/node
-    - require:
-      - pkg: nodejs
+  file.symlink:
+    - name: /usr/bin/node
+    - target: /usr/bin/nodejs
+{% endif %}

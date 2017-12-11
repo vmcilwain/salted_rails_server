@@ -1,3 +1,22 @@
+# Sample salt-ssh config file
+#web1:
+#  host: 192.168.42.1 # The IP addr or DNS hostname
+#  user: fred         # Remote executions will be executed as user fred
+#  passwd: foobarbaz  # The password to use for login, if omitted, keys are used
+#  sudo: True         # Whether to sudo to root, not enabled by default
+#web2:
+#  host: 192.168.42.2
+#development:
+#  host: 192.168.42.3
+#  user: ubuntu
+#  sudo: True
+#  priv: /home/ubuntu/.ssh/key.pem
+#  grains:
+#      role: 'staging'
+#      db_name: 'db-name'
+#      db_password: 'password'
+#      s3_bucket_name: 's3-bucket-name'
+
 managed:
   host: IP or DNS Name or remote host
   user: username on remote host

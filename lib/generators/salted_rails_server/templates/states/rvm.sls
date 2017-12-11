@@ -1,5 +1,3 @@
-# Comment out line 26 in /home/deploy/.profile. This is possibly causing issues.
-
 gpg-deps:
     pkg.installed:
         - names:
@@ -9,8 +7,11 @@ gpg-import-D39DC0E3:
     cmd.run:
       - require:
           - pkg: gpg-deps
-      - name: 'gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3'
-      - unless: "gpg --fingerprint |fgrep 'Key fingerprint = 409B 6B17 96C2 7546 2A17  0311 3804 BB82 D39D C0E3'"
+#      - user: rvm
+#      - require:
+#        - user: rvm
+      - name: gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys D39DC0E3; echo '409B6B1796C275462A1703113804BB82D39DC0E3:4:' |gpg --import-ownertrust
+      - unless: gpg --fingerprint |fgrep 'Key fingerprint = 409B 6B17 96C2 7546 2A17  0311 3804 BB82 D39D C0E3'
 
 rvm-deps:
   pkg.installed:
@@ -31,7 +32,7 @@ mri-deps:
       - build-essential
       - openssl
       - libreadline6
-      - libreadline6-dev
+      - libreadline-dev
       - curl
       - git-core
       - zlib1g
@@ -55,7 +56,7 @@ mri-deps:
 rvm_install:
   cmd.run:
     - name: curl -sSL https://get.rvm.io | bash
-    - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
+    - user: {{ salt['pillar.get']('default:user:username') }}
     - unless: /home/rvm/.rvm/bin/rvm --version
     - require:
       - pkg: rvm-deps
@@ -65,21 +66,20 @@ rvm_install:
 rvm_reload:
   cmd.run:
     - name: source ~/.rvm/scripts/rvm
-    - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
+    - user: {{ salt['pillar.get']('default:user:username') }}
     - require:
       - cmd: rvm_install
 
-ruby-{{ salt['pillar.get']('default:ruby:version', '2.2.4') }}:
+ruby-{{ salt['pillar.get']('default:ruby:version', '2.2.3') }}:
     cmd.run:
-      - name: rvm install {{ salt['pillar.get']('default:ruby:version', '2.2.4') }}
-      - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
+      - name: rvm install {{ salt['pillar.get']('default:ruby:version', '2.2.3') }}
+      - user: {{ salt['pillar.get']('default:user:username') }}
       - require:
         - cmd: rvm_reload
 
 rvm_default:
   cmd.run:
-    - name: /bin/bash --login -c 'rvm use {{ salt['pillar.get']('default:ruby:version', '2.2.4') }} --default'
-    - user: {{ salt['pillar.get']('default:user:username', 'deploy') }}
+    - name: /bin/bash --login -c 'rvm use {{ salt['pillar.get']('default:ruby:version', '2.2.3') }} --default'
+    - user: {{ salt['pillar.get']('default:user:username') }}
     - require:
-      - cmd: ruby-{{ salt['pillar.get']('default:ruby:version', '2.2.4') }}
-
+      - cmd: ruby-{{ salt['pillar.get']('default:ruby:version', '2.2.3') }}

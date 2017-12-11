@@ -2,7 +2,11 @@ include:
   - user
   - mysql
   - nginx
-  - rvm
-  - elasticsearch
-  - rails
   - node
+  - imagemagick
+  - rvm
+  # - elasticsearch
+  # - redis
+  - rails
+  - backup
+  - logrotate
