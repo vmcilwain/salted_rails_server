@@ -1,7 +1,7 @@
 default:
   rails_env: development
   user:
-    username: user-name
+    username: deploy
     shell: /bin/bash
   ssh:
     key: ssh-rsa ...
@@ -17,3 +17,8 @@ default:
     version: elasticsearch-5.2.2.deb
   backup:
       version: 5.0.0.beta.1
+  amazon:
+    access_key:
+    secret_key:
+    ses_username:
+    ses_password:
