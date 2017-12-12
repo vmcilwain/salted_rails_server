@@ -6,17 +6,17 @@ A ruby on rails generator for provisioning a new server using salt-ssh
 
 Supports the following:
 
-* [Backup] (https://github.com/backup/backup)
-* [ElasticSearch] (https://info.elastic.co/branded-ggl-elastic-exact-v3.html?camp=Branded-GGL-Exact&src=adwords&mdm=cpc&trm=elasticsearch&gclid=EAIaIQobChMIhuuXsc6E2AIVEoGzCh1JFgyzEAAYAiAAEgKRZ_D_BwE)
-* [ImageMagick] (https://www.imagemagick.org/script/index.php)
-* [LogRotate] (http://www.thegeekstuff.com/2010/07/logrotate-examples/)
-* [Monit] (https://mmonit.com/monit)
-* [MySQL] (https://www.mysql.com/)
-* [NGINX] (https://www.nginx.com/)
-* [Node] (https://nodejs.org/)
-* [Redis] (https://redis.io/)
-* [RubyOnRails] (http://rubyonrails.org/)
-* [RVM] (https://rvm.io/)
+* [Backup](https://github.com/backup/backup)
+* [ElasticSearch](https://info.elastic.co/branded-ggl-elastic-exact-v3.html?camp=Branded-GGL-Exact&src=adwords&mdm=cpc&trm=elasticsearch&gclid=EAIaIQobChMIhuuXsc6E2AIVEoGzCh1JFgyzEAAYAiAAEgKRZ_D_BwE)
+* [ImageMagick](https://www.imagemagick.org/script/index.php)
+* [LogRotate](http://www.thegeekstuff.com/2010/07/logrotate-examples/)
+* [Monit](https://mmonit.com/monit)
+* [MySQL](https://www.mysql.com/)
+* [NGINX](https://www.nginx.com/)
+* [Node](https://nodejs.org/)
+* [Redis](https://redis.io/)
+* [RubyOnRails](http://rubyonrails.org/)
+* [RVM](https://rvm.io/)
 * User - User setup
 
 All installations are the latest packages for the managed system unless there is a version section in the pillars/default.sls.
