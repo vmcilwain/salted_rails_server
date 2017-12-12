@@ -1,26 +1,35 @@
-# salted_rails_server
+# Salted _ Rails _ Server
 
-A ruby on rails generator used to provision a new server (using salt-ssh) with the following:
+## Description
 
-* RAILS_ENV set to development
-* User for running rails - default: deploy
-* RVM - latest stable version
-* NGINX - latest OS repo version
-* Rails - latest stable version
-* Elasticsearch - default: 2.3.4
-* NodeJS - latest OS repo version
-* MySQL - latest OS repo version
+A ruby on rails generator for provisioning a new server using salt-ssh
+
+Supports the following:
+
+* [Backup] (https://github.com/backup/backup)
+* [ElasticSearch] (https://info.elastic.co/branded-ggl-elastic-exact-v3.html?camp=Branded-GGL-Exact&src=adwords&mdm=cpc&trm=elasticsearch&gclid=EAIaIQobChMIhuuXsc6E2AIVEoGzCh1JFgyzEAAYAiAAEgKRZ_D_BwE)
+* [ImageMagick] (https://www.imagemagick.org/script/index.php)
+* [LogRotate] (http://www.thegeekstuff.com/2010/07/logrotate-examples/)
+* [Monit] (https://mmonit.com/monit)
+* [MySQL] (https://www.mysql.com/)
+* [NGINX] (https://www.nginx.com/)
+* [Node] (https://nodejs.org/)
+* [RubyOnRails] (http://rubyonrails.org/)
+* [RVM] (https://rvm.io/)
+* User - User setup
+
+All installations are the latest packages for the managed system unless there is a version section in the pillars/default.sls.
 
 ## Tested on
 
-* Ubuntu 14.04
-* Ubuntu 15.10
+* Ubuntu Trust
+* Ubuntu Xenial
 
-No reason this should not work on any other saltstack supported OS. If you have tried this on any other OS and it did not work, let me know.
+No reason this should not work on any other salt stack supported OS. If you have tried this on any other OS and it did not work, please let me know.
 
 ## salt-ssh installation
 
-This code requires that you have Saltstack's salt-ssh already installed the system you are deploying from and a compatible version of python on the system you are deploying to.
+This code requires that you have Saltstack's salt-ssh already installed on the system you are deploying from and a compatible version of python on the system you are deploying to. If you are a mac user attempting to use this and you have issues, try using [salt-ssh-vm] ()
 
 Consult the following documentation for your OS:
 https://docs.saltstack.com/en/latest/topics/installation/index.html
@@ -43,23 +52,63 @@ And then generate code:
 rails g salted_rails_server
 ```
 
-The following files will be generated:
+The following files will be generated in the root directory:
 
-* master
-* roster
-* Saltfile
-* salted_rails_server/pillars*
-* salted_rails_server/states/*
+```
+./master
+./roster # DO NOT CHECK IN THIS FILE!!!
+./Saltfile
+./salt_ssh
+├── pillars
+│   ├── default.sls
+│   └── top.sls
+└── states
+    ├── backup
+    │   └── files
+    │       └── home
+    │           └── deploy
+    │               ├── bin
+    │               │   └── backup.rb
+    │               └── config
+    │                   └── schedule.rb
+    ├── backup.sls
+    ├── elasticsearch.sls
+    ├── imagemagick.sls
+    ├── logrotate
+    │   └── files
+    │       └── etc
+    │           └── logrotate.d
+    │               └── rails
+    ├── logrotate.sls
+    ├── monit
+    │   ├── etc
+    │   │   └── monit
+    │   │       └── monitrc
+    │   └── redis.sls
+    ├── monit.sls
+    ├── mysql.sls
+    ├── nginx.sls
+    ├── node.sls
+    ├── rails.sls
+    ├── rvm.sls
+    ├── setup.sls
+    └── user.sls
+```
 
 ## Configuration
 
-Add your custom options to the following files:
+Add custom options to the following files:
 
 * roster - remote host(s) information
-* pillars/default/init.sls - rails environment, username, ssh-key, mysql root and rails_user password and version of ruby and elasticsearch to be installed.
+* pillars/default.sls - RAILS_ENV, Remote Username with ssh-key, MYSQL root and rails user user password and versions of ruby and elasticsearch to be installed.
 
+## Setting up Remote system
+
+Add your public ssh key to the authorized_keys on remote server that you plan to manage. I normally add this to root but it needs to be added to a user with sudo privileges.
 
 ## Testing salt-ssh connection
+
+From within the appliation root directory type:
 
 ```
 sudo salt-ssh -i '*' test.ping
@@ -71,47 +120,98 @@ managed:
     True
 ```
 
-## Running the code
-
-### Installing all states:
+If that is not returned, salt-ssh should give you an accurate reason to why it was not able to connect. Another tool to use is the verbose option on the ssh command.
 
 ```
-sudo salt-ssh -i '*' state.apply setup
+ssh -vv user@remote-host
 ```
 
-This takes a while and there aren't any status updates as things
-progress. Be patient!
+## The States (Remote Management)
 
-### Installing an individual state:
+### Available States
 
-```
-sudo salt-ssh -i '*' state.apply state_file
-```
-
-#### States to chose from
-
+* backup
 * elasticsearch
+* imagemagick
+* logrotate
+* monit
 * mysql
 * nginx
 * node
 * rails
 * rvm
-* user
+* setup
+* user - User setup
 
-## Code Details
+### The Setup State
 
-### User state
+```
+sudo salt-ssh -i '*' state.apply setup
+```
 
-Creates a user that is defined in pillars/default/init.sls. If a user is not found it will default to user named deploy. This state also addes the user to /etc/sudoers for executing code without the need for a password.
+This runs the minimum set of states in a specific order. Be sure to look at salt_ssh/states/setup.sls to comment or uncomment any additional items you do or don't want installed during the setup process.
 
-#### RSA key
+This takes a while and there aren't any status updates as things
+progress. Be patient!
 
-Update pillars/default/init.sls to add your ssh key to log in as the user created in the user state. This is required since the user created does not have a default password assigned. This is done for strong security!
+### Individual States
 
-### RVM state
+```
+sudo salt-ssh -i '*' state.apply state_file
+```
 
-Installed under the user that is created from the user state
-Sets the default to the specified version in pillars/default/init.sls
+## State Details
+
+### Backup State
+
+Installs the [backup] (https://github.com/backup/backup) and [whenever](https://github.com/javan/whenever) gems for backing up your rails application
+
+The backup configuration is stored in `/home/username/bin`
+
+Whenever configuration is stored in `/home/username/config`
+
+Backups are stored in `/var/backups/rails`
+
+It has configurations for using AWS S3 and SES. Those configurations can be added to the roster file. You can see an example of this in the roster file.
+
+### ElasticSearch State (Debian/Ubuntu Only)
+
+Installs the specified version of elasticsearch found in salt_ssh/pillars/default.sls. The fallback is version 2.3.4. This also installs the openjdk_7_jre dependency.
+
+### ImageMagick State
+
+Installs the lates version of ImageMagick via the package manager for the OS
+
+### LogRotate State
+
+Ensures logrotate is installed on the remote system (it most likely is) via the package manager for the OS. Adds a rails config in /etc/logrotate.d
+
+### Monit State
+
+Ensures monit is installed via the package manager for the OS
+and running. Makes a backup of the original /etc/monit/monitrc then replaces it with config that monitors any monit configs stored within the rails application.
+
+The monit config file is setup to use AWS SES which you can add the credentials to the roster file.
+
+### MySQL state
+
+Ensures MySQL is installed via the package manager for the OS and running. Currently, you will need to create the user account due to the following open issues:
+
+[29265](https://github.com/saltstack/salt/issues/29265)
+
+[44200](https://github.com/saltstack/salt/issues/44200)
+
+Once resolved, the option to create MySQL users will be re-enabled.
+
+The code is commented out in salt_ssh/states/user.sls if you decide you want to try and use it before the issues are resolved.
+
+### NGINX State
+
+Installs NGINX via the package manager for the OS and ensures it is running.
+
+### Node State
+
+Ensures nodejs is installed via the package manager for the OS and creates a node symlink if it doesn't exist
 
 ### Rails state
 
@@ -121,19 +221,36 @@ Installs the following gems under RVM
 * Rails
 * Unicorn
 
-Finds or creates /var/www and sets the owner of that directory to the specified user in the user state
+creates /var/www if it doesn't exist and sets the owner of that directory to the specified user in the user state
 
-### MySQL state
+### RVM state
 
-Creates a rails_user account with the appropriate permissions to run rails nothing more. Sets its password to what is specified in pillar/default/init.sls
-Sets the root password to what is specified in pillar/default/init.sls
+Installs RVM under the specified user in the user state. Sets the default to the specified version in salt_ssh/pillars/default.sls
 
+### User state
+
+Creates a user that is defined in salt_ssh/pillars/default.sls. If a user is not found it will default to user named deploy. This state also adds the user to /etc/sudoers for executing code without the need for a password.
+
+#### RSA key
+
+Update salt_ssh/pillars/default/init.sls to add your ssh key to log in as the user created in the user state. This is required since the user created does not have a default password assigned. This is done for strong security!
 
 ## Caution
 
 Take a look at the code before you use it to make sure that it works the way you expect or want. After the code is generated you can modify it to fit your needs before executing.
 
-# Contributing
+
+## Uninstalling
+
+To uninstall salted_rails_server simply delete the following files:
+
+* /master
+* /roster
+* /Saltfile
+* /salt.log
+* /salt_ssh #directory
+
+## Contributing
 
 I am looking for constructive criticisim on making this better and easier for everyone who could use it.
 
