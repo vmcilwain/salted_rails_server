@@ -16,6 +16,11 @@
 #      db_name: 'db-name'
 #      db_password: 'password'
 #      s3_bucket_name: 's3-bucket-name'
+#      aws_access_key: {{ salt['pillar.get']('default:amazon:access_key') }}
+#      aws_secret_key: {{ salt['pillar.get']('default:amazon:secret_key') }}
+#      aws_ses_username: {{ salt['pillar.get']('default:amazon:ses_username') }}
+#      aws_ses_password: {{ salt['pillar.get']('default:amazon:ses_password') }}
+#      aws_ses_emails: ''
 
 managed:
   host: IP or DNS Name or remote host
