@@ -1,56 +1,53 @@
 class SaltedRailsServerGenerator < Rails::Generators::Base
   source_root File.expand_path('../templates', __FILE__)
 
-  desc 'create salted_rails_server directories'
+  desc 'create directories'
   def create_file_structure
-    run 'mkdir -p salted_rails_server/pillars'
-    run 'mkdir -p salted_rails_server/pillars/default'
-    run 'mkdir -p salted_rails_server/states'
+    run 'mkdir -p salt_ssh/pillars'
+    run 'mkdir -p salt_ssh/states/backup/files/home/deploy/bin'
+    run 'mkdir -p salt_ssh/states/backup/files/home/deploy/config'
+    run 'mkdir -p salt_ssh/states/logrotate/files/etc/logrotate.d'
+    run 'mkdir -p salt_ssh/states/monit/etc/monit'
   end
 
-  desc 'generatre salted_rails_server default pillar template'
+  desc 'generatre default pillar'
   def copy_pillar_files
-    copy_file 'pillars/default/init.sls', 'salted_rails_server/pillars/default/init.sls'
-    copy_file 'pillars/top.sls', 'salted_rails_server/pillars/top.sls'
+    copy_file 'pillars/default.sls', 'salt_ssh/pillars/default.sls'
+    copy_file 'pillars/top.sls', 'salt_ssh/pillars/top.sls'
   end
-  
-  desc 'generate salted_rails_server state files'
+
+  desc 'generate state files'
   def copy_state_files
-    copy_file 'states/elasticsearch.sls', 'salted_rails_server/states/elasticsearch.sls'
-    copy_file 'states/mysql.sls', 'salted_rails_server/states/mysql.sls'
-    copy_file 'states/nginx.sls', 'salted_rails_server/states/nginx.sls'
-    copy_file 'states/node.sls', 'salted_rails_server/states/node.sls'
-    copy_file 'states/rails.sls', 'salted_rails_server/states/rails.sls'
-    copy_file 'states/rvm.sls', 'salted_rails_server/states/rvm.sls'
-    copy_file 'states/setup.sls', 'salted_rails_server/states/setup.sls'
-    copy_file 'states/user.sls', 'salted_rails_server/states/user.sls'
+    Dir["#{__dir__}/templates/states/**/*"].each do |file|
+      copy_file file, "salt_ssh/#{file.gsub(__dir__+'/templates/', '')}" unless File.directory? file
+    end
   end
-  
-  desc 'generate salted_rails_server salt-ssh roster file'
+
+  desc 'generate roster file'
   def copy_roster
     copy_file 'roster', 'roster'
   end
-  
-  desc 'generate salted_rails_server salt-ssh master file'
+
+  desc 'generate master file'
   def generate_master
     create_file 'master', <<-CODE
 file_roots:
   base:
-    - #{Rails.root}/salted_rails_server/states
+    - #{Rails.root}/salt_ssh/states
 
 pillar_roots:
   base:
-  - #{Rails.root}/salted_rails_server/pillars
+  - #{Rails.root}/salt_ssh/pillars
     CODE
   end
-  
-  desc 'generate salted_rails_server salt-ssh Saltfile file'
+
+  desc 'generate Saltfile file'
   def generate_saltfile
     create_file "Saltfile", <<-CODE
 salt-ssh:
   config_dir: #{Rails.root}
   roster_file: #{Rails.root}/roster
-  log_file: #{Rails.root}/saltlog.txt
+  log_file: #{Rails.root}/salt.log
     CODE
   end
 end
