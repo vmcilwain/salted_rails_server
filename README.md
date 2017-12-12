@@ -166,7 +166,7 @@ sudo salt-ssh -i '*' state.apply state_file
 
 ### Backup State
 
-Installs the [backup] (https://github.com/backup/backup) and [whenever](https://github.com/javan/whenever) gems for backing up your rails application.
+Installs the [backup](https://github.com/backup/backup) and [whenever](https://github.com/javan/whenever) gems for backing up your rails application.
 
 The backup configuration is stored in `/home/username/bin`
 
