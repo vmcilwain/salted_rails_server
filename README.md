@@ -14,6 +14,7 @@ Supports the following:
 * [MySQL] (https://www.mysql.com/)
 * [NGINX] (https://www.nginx.com/)
 * [Node] (https://nodejs.org/)
+* [Redis] (https://redis.io/)
 * [RubyOnRails] (http://rubyonrails.org/)
 * [RVM] (https://rvm.io/)
 * User - User setup
@@ -89,6 +90,7 @@ The following files will be generated in the root directory:
     ├── mysql.sls
     ├── nginx.sls
     ├── node.sls
+    ├── redis.sls
     ├── rails.sls
     ├── rvm.sls
     ├── setup.sls
@@ -138,6 +140,7 @@ ssh -vv user@remote-host
 * mysql
 * nginx
 * node
+* redis
 * rails
 * rvm
 * setup
@@ -151,8 +154,7 @@ sudo salt-ssh -i '*' state.apply setup
 
 This runs the minimum set of states in a specific order. Be sure to look at salt_ssh/states/setup.sls to comment or uncomment any additional items you do or don't want installed during the setup process.
 
-This takes a while and there aren't any status updates as things
-progress. Be patient!
+This takes a while and there aren't any status updates as things progress. Be patient!
 
 ### Individual States
 
@@ -164,7 +166,7 @@ sudo salt-ssh -i '*' state.apply state_file
 
 ### Backup State
 
-Installs the [backup] (https://github.com/backup/backup) and [whenever](https://github.com/javan/whenever) gems for backing up your rails application
+Installs the [backup] (https://github.com/backup/backup) and [whenever](https://github.com/javan/whenever) gems for backing up your rails application.
 
 The backup configuration is stored in `/home/username/bin`
 
@@ -180,11 +182,11 @@ Installs the specified version of elasticsearch found in salt_ssh/pillars/defaul
 
 ### ImageMagick State
 
-Installs the lates version of ImageMagick via the package manager for the OS
+Installs the lates version of ImageMagick via the package manager for the OS.
 
 ### LogRotate State
 
-Ensures logrotate is installed on the remote system (it most likely is) via the package manager for the OS. Adds a rails config in /etc/logrotate.d
+Ensures logrotate is installed on the remote system (it most likely is) via the package manager for the OS. Adds a rails config in /etc/logrotate.d.
 
 ### Monit State
 
@@ -211,21 +213,24 @@ Installs NGINX via the package manager for the OS and ensures it is running.
 
 ### Node State
 
-Ensures nodejs is installed via the package manager for the OS and creates a node symlink if it doesn't exist
+Ensures nodejs is installed via the package manager for the OS and creates a node symlink if it doesn't exist.
 
+### Redis State
+
+Ensures redis is installed via the package manager for the OS and is running.
 ### Rails state
 
-Installs the following gems under RVM
+Installs the following gems under RVM:
 
 * Bundler
 * Rails
 * Unicorn
 
-creates /var/www if it doesn't exist and sets the owner of that directory to the specified user in the user state
+creates /var/www if it doesn't exist and sets the owner of that directory to the specified user in the user state.
 
 ### RVM state
 
-Installs RVM under the specified user in the user state. Sets the default to the specified version in salt_ssh/pillars/default.sls
+Installs RVM under the specified user in the user state. Sets the default to the specified version in salt_ssh/pillars/default.sls.
 
 ### User state
 
@@ -233,7 +238,7 @@ Creates a user that is defined in salt_ssh/pillars/default.sls. If a user is not
 
 #### RSA key
 
-Update salt_ssh/pillars/default/init.sls to add your ssh key to log in as the user created in the user state. This is required since the user created does not have a default password assigned. This is done for strong security!
+Update salt_ssh/pillars/default/init.sls to add your ssh key to log in as the user created in the user state. This is required since the user created does not have a default password assigned. This is done for strong security!.
 
 ## Caution
 
